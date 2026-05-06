@@ -1,0 +1,24 @@
+﻿@page "{id:int}"
+@model VideoGameManager.Pages.Shared.Games.DeleteModel
+@{
+	ViewData["Title"] = "Eliminar Joc";
+}
+<h1>Eliminar @Model.Game.Title?</h1>
+<p>Estàs segur que vols eliminar aquest joc?</p>
+
+<dl>
+    <dt>Títol</dt>
+    <dd>@Model.Game.Title</dd>
+    <dt>Gènere</dt>
+    <dd>@Model.Game.Genre</dd>
+    <dt>Any</dt>
+    <dd>@Model.Game.Year</dd>
+    <dt>Puntuació</dt>
+    <dd>@Model.Game.Score</dd>
+</dl>
+
+<form method="post">
+    <input type="hidden" asp-for="Game.Id" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel·lar</a>
+</form>

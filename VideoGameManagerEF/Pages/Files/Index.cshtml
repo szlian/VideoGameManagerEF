@@ -1,0 +1,29 @@
+﻿@page
+@model VideoGameManager.Pages.Files.IndexModel
+@{
+	ViewData["Title"] = "Gestió de Fitxers";
+}
+
+<h1>Gestió de Fitxers</h1>
+
+<h3>Log d'Activitat</h3>
+<ul>
+    @foreach (var entry in Model.LogEntries)
+    {
+        <li>@entry</li>
+    }
+</ul>
+
+<h3>Accions</h3>
+<form method="post" asp-page-handler="ExportJson">
+    <button type="submit">Exportar a JSON</button>
+</form>
+<form method="post" asp-page-handler="ImportJson">
+    <button type="submit">Importar de JSON</button>
+</form>
+<form method="post" asp-page-handler="ExportCsv">
+    <button type="submit">Descarregar CSV</button>
+</form>
+<form method="post" asp-page-handler="ExportXml">
+    <button type="submit">Generar Ranking XML</button>
+</form>

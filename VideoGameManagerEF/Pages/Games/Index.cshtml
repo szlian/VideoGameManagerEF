@@ -1,0 +1,30 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Llista de Jocs";
+}
+
+<h1>Videojocs</h1>
+<a asp-page="Create" class="btn btn-primary">Nou Joc</a>
+
+<table class="table">
+    <thead>
+        <tr><th>Títol</th><th>Gènere</th><th>Any</th><th>Puntuació</th><th>Accions</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var game in Model.Games)
+        {
+            <tr>
+                <td>@game.Title</td>
+                <td>@game.Genre</td>
+                <td>@game.Year</td>
+                <td>@game.Score</td>
+                <td>
+                    <a asp-page="Details" asp-route-id="@game.Id" class="btn btn-info">Details</a>
+                    <a asp-page="Edit" asp-route-id="@game.Id" class="btn btn-warning">Edit</a>
+                    <a asp-page="Delete" asp-route-id="@game.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
