@@ -1,34 +1,71 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using VideoGameManagerEF.Data;
 using VideoGameManagerEF.Models;
-using VideoGameManagerEF.Services;
 
 namespace VideoGameManagerEF.Pages.Games
 {
     public class EditModel : PageModel
     {
-        private readonly GameService _service;
+        private readonly GameStoreContext _context;
+
+        public EditModel(GameStoreContext context)
+        {
+            _context = context;
+        }
 
         [BindProperty]
-        public Game Game { get; set; } = new();
+        public Game Game { get; set; } = default!;
 
-        public EditModel(GameService service) => _service = service;
+        public SelectList DeveloperList { get; set; } = default!;
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            var game = _service.GetById(id);
-            if (game == null) return RedirectToPage("Index");
+            Game = await _context.Games.FindAsync(id);
 
-            Game = game;
+            if (Game == null)
+            {
+                return NotFound();
+            }
+
+            var developers = await _context.Developers.ToListAsync();
+            DeveloperList = new SelectList(developers, "Id", "Name");
+
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid) return Page();
+            if (!ModelState.IsValid)
+            {
+                var developers = await _context.Developers.ToListAsync();
+                DeveloperList = new SelectList(developers, "Id", "Name");
+                return Page();
+            }
 
-            _service.Update(Game);
-            return RedirectToPage("Index");
+            _context.Attach(Game).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!GameExists(Game.Id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+
+            return RedirectToPage("./Index");
+        }
+
+        private bool GameExists(int id)
+        {
+            return _context.Games.Any(e => e.Id == id);
         }
     }
 }

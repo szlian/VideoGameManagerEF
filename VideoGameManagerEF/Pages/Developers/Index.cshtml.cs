@@ -3,26 +3,24 @@ using Microsoft.EntityFrameworkCore;
 using VideoGameManagerEF.Data;
 using VideoGameManagerEF.Models;
 
-namespace VideoGameManagerEF.Pages.Games
+namespace VideoGameManagerEF.Pages.Developers
 {
     public class IndexModel : PageModel
     {
         private readonly GameStoreContext _context;
 
-        // Inject the database context through constructor
         public IndexModel(GameStoreContext context)
         {
             _context = context;
         }
 
-        public List<Game> Games { get; set; } = new();
+        public List<Developer> Developers { get; set; } = new();
 
         public async Task OnGetAsync()
         {
-            // Include joins the Developer table automatically
-            // so we can show the developer name in the view
-            Games = await _context.Games
-                .Include(g => g.Developer)
+            // Include loads the Games collection so we can count them
+            Developers = await _context.Developers
+                .Include(d => d.Games)
                 .ToListAsync();
         }
     }

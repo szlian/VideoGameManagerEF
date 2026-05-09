@@ -1,24 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using VideoGameManagerEF.Data;
 using VideoGameManagerEF.Models;
-using VideoGameManagerEF.Services;
 
-namespace VideoGameManagerEF.Pages.Shared.Games
+namespace VideoGameManagerEF.Pages.Games
 {
     public class CreateModel : PageModel
     {
-        private readonly GameService _service;
+        private readonly GameStoreContext _context;
+
+        public CreateModel(GameStoreContext context)
+        {
+            _context = context;
+        }
 
         [BindProperty]
         public Game Game { get; set; } = new();
 
-        public CreateModel(GameService service) => _service = service;
+        // Dropdown list for developers
+        public SelectList DeveloperList { get; set; } = default!;
 
-        public IActionResult OnPost()
+        public async Task OnGetAsync()
         {
-            if (!ModelState.IsValid) return Page();
-            _service.Add(Game);
-            return RedirectToPage("Index");
+            // Load all developers for the dropdown
+            var developers = await _context.Developers.ToListAsync();
+            DeveloperList = new SelectList(developers, "Id", "Name");
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                // Reload dropdown if validation fails
+                var developers = await _context.Developers.ToListAsync();
+                DeveloperList = new SelectList(developers, "Id", "Name");
+                return Page();
+            }
+
+            _context.Games.Add(Game);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./Index");
         }
     }
 }

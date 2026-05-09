@@ -1,0 +1,170 @@
+﻿@page
+@model VideoGameManagerEF.Pages.Stats.IndexModel
+@{
+    ViewData["Title"] = "Statistics";
+}
+
+<h1>Game Statistics</h1>
+
+<div class="row">
+    @* 6.1: Filter by genre *@
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">6.1 - Filter by Genre</div>
+            <div class="card-body">
+                <form method="get">
+                    <select asp-for="SelectedGenre" class="form-select mb-2">
+                        <option value="">-- Select Genre --</option>
+                        @foreach (var genre in Model.Genres)
+                        {
+                            <option value="@genre">@genre</option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+                </form>
+
+                @if (Model.FilteredGames.Any())
+                {
+                    <table class="table table-sm mt-3">
+                        <thead><tr><th>Title</th><th>Score</th><th>Dev</th></tr></thead>
+                        <tbody>
+                            @foreach (var g in Model.FilteredGames)
+                            {
+                                <tr><td>@g.Title</td><td>@g.Score</td><td>@(g.Developer?.Name)</td></tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+
+    @* 6.2: Top 5 *@
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">6.2 - Top 5 Best Rated</div>
+            <div class="card-body">
+                <ol class="list-group list-group-numbered">
+                    @foreach (var g in Model.Top5Games)
+                    {
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>@g.Title (@(g.Developer?.Name ?? "-"))</span>
+                            <span class="badge bg-success">@g.Score</span>
+                        </li>
+                    }
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    @* 6.3: By decade *@
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">6.3 - Games by Decade</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead><tr><th>Decade</th><th>Count</th></tr></thead>
+                    <tbody>
+                        @foreach (var d in Model.GamesByDecade)
+                        {
+                            <tr><td>@d.Decade's</td><td>@d.Count</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @* 7.1: Average by developer *@
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">7.1 - Avg Score by Developer</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead><tr><th>Developer</th><th>Games</th><th>Avg</th></tr></thead>
+                    <tbody>
+                        @foreach (var d in Model.AvgScoreByDeveloper)
+                        {
+                            <tr>
+                                <td>@d.Name</td>
+                                <td>@d.GameCount</td>
+                                <td>@d.AvgScore.ToString("F2")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @* 7.3: Productive developers *@
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">7.3 - Productive Developers</div>
+            <div class="card-body">
+                <form method="get" class="mb-3">
+                    <div class="input-group">
+                        <input asp-for="GameThreshold" class="form-control" placeholder="Min games" />
+                        <button type="submit" class="btn btn-secondary">Go</button>
+                    </div>
+                </form>
+
+                @if (Model.ProductiveDevelopers.Any())
+                {
+                    <ul class="list-group">
+                        @foreach (var d in Model.ProductiveDevelopers)
+                        {
+                            <li class="list-group-item d-flex justify-content-between">
+                                @d.Name
+                                <span class="badge bg-secondary">@d.Games.Count</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else if (Model.GameThreshold.HasValue)
+                {
+                    <p class="text-muted">No developers exceed this threshold.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@* 7.2: Combined search *@
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">7.2 - Combined Search</div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <input asp-for="TitleFilter" class="form-control" placeholder="Title contains..." />
+            </div>
+            <div class="col-md-3">
+                <input asp-for="GenreFilter" class="form-control" placeholder="Genre" />
+            </div>
+            <div class="col-md-3">
+                <input asp-for="MinYear" class="form-control" type="number" placeholder="Min Year" />
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-dark w-100">Search</button>
+            </div>
+        </form>
+
+        @if (Model.SearchResults.Any())
+        {
+            <table class="table table-sm mt-3">
+                <thead><tr><th>Title</th><th>Genre</th><th>Year</th><th>Developer</th></tr></thead>
+                <tbody>
+                    @foreach (var g in Model.SearchResults)
+                    {
+                        <tr>
+                            <td>@g.Title</td>
+                            <td>@g.Genre</td>
+                            <td>@g.Year</td>
+                            <td>@(g.Developer?.Name)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

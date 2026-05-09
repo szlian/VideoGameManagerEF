@@ -1,44 +1,68 @@
 ﻿@page
-@model VideoGameManagerEF.Pages.Shared.Games.CreateModel
+@model VideoGameManagerEF.Pages.Games.CreateModel
 @{
-	ViewData["Title"] = "Nou Joc";
+    ViewData["Title"] = "Create Game";
 }
-<h1>Crear Joc</h1>
-<form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    
-    <div class="form-group">
-        <label asp-for="Game.Title"></label>
-        <input asp-for="Game.Title" class="form-control" />
-        <span asp-validation-for="Game.Title" class="text-danger"></span>
+
+<h1>Create New Game</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Game.Title" class="form-label"></label>
+                <input asp-for="Game.Title" class="form-control" />
+                <span asp-validation-for="Game.Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Game.Genre" class="form-label"></label>
+                <input asp-for="Game.Genre" class="form-control" />
+                <span asp-validation-for="Game.Genre" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Game.Year" class="form-label"></label>
+                <input asp-for="Game.Year" class="form-control" type="number" />
+                <span asp-validation-for="Game.Year" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Game.Score" class="form-label"></label>
+                <input asp-for="Game.Score" class="form-control" step="0.1" />
+                <span asp-validation-for="Game.Score" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Game.Platform" class="form-label"></label>
+                <input asp-for="Game.Platform" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Game.Description" class="form-label"></label>
+                <textarea asp-for="Game.Description" class="form-control"></textarea>
+            </div>
+
+            @* 
+                Dropdown for developer selection.
+                asp-items uses the SelectList from the PageModel.
+                asp-for binds to DeveloperId (foreign key).
+            *@
+            <div class="mb-3">
+                <label asp-for="Game.DeveloperId" class="form-label">Developer</label>
+                <select asp-for="Game.DeveloperId" asp-items="Model.DeveloperList" class="form-select">
+                    <option value="">-- Select Developer --</option>
+                </select>
+                <span asp-validation-for="Game.DeveloperId" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a class="btn btn-secondary" asp-page="Index">Cancel</a>
+        </form>
     </div>
-    
-    <div class="form-group">
-        <label asp-for="Game.Genre"></label>
-        <input asp-for="Game.Genre" class="form-control" />
-        <span asp-validation-for="Game.Genre" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="Game.Year"></label>
-        <input asp-for="Game.Year" class="form-control" />
-        <span asp-validation-for="Game.Year" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="Game.Score"></label>
-        <input asp-for="Game.Score" class="form-control" />
-        <span asp-validation-for="Game.Score" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="Game.Description"></label>
-        <textarea asp-for="Game.Description" class="form-control"></textarea>
-    </div>
-    
-    <button type="submit" class="btn btn-primary">Crear</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancel·lar</a>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

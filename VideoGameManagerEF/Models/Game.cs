@@ -11,6 +11,8 @@ namespace VideoGameManagerEF.Models
         [StringLength(100)]
         public string Title { get; set; } = string.Empty;
 
+     
+
         [Required(ErrorMessage = "Genre is required")]
         public string Genre { get; set; } = string.Empty;
 
