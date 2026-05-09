@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using VideoGameManager.Models;
-using VideoGameManager.Services;
+using VideoGameManagerEF.Models;
+using VideoGameManagerEF.Services;
 
-namespace VideoGameManager.Pages.Shared.Games
+namespace VideoGameManagerEF.Pages.Shared.Games
 {
     public class CreateModel : PageModel
     {

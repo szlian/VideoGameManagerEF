@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace VideoGameManager.Pages
+namespace VideoGameManagerEF.Pages
 {
     public class PrivacyModel : PageModel
     {

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using VideoGameManager.Services;
+using VideoGameManagerEF.Services;
 
-namespace VideoGameManager.Pages.Files
+namespace VideoGameManagerEF.Pages.Files
 {
     public class IndexModel : PageModel
     {

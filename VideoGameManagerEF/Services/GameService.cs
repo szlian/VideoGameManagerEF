@@ -1,6 +1,6 @@
-﻿using VideoGameManager.Models;
+﻿using VideoGameManagerEF.Models;
 
-namespace VideoGameManager.Services
+namespace VideoGameManagerEF.Services
 {
     public class GameService
 {

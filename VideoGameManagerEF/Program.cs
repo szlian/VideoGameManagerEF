@@ -1,11 +1,14 @@
-
-using VideoGameManager.Services;
+using VideoGameManagerEF.Data;
+using Microsoft.EntityFrameworkCore;
+using VideoGameManagerEF.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<GameService>();
+builder.Services.AddDbContext<GameStoreContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
